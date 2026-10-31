@@ -61,27 +61,41 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme inline {
+  --font-serif: "Lora", Georgia, serif;
+  --font-sans: "Nunito Sans", system-ui, sans-serif;
+  --color-honey: var(--honey);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-foreground: var(--terracotta-foreground);
+  --color-cream-deep: var(--cream-deep);
+}
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --radius: 1rem;
+  --background: oklch(0.97 0.018 80);
+  --foreground: oklch(0.28 0.045 45);
+  --card: oklch(0.99 0.01 80);
+  --card-foreground: oklch(0.28 0.045 45);
+  --popover: oklch(0.99 0.01 80);
+  --popover-foreground: oklch(0.28 0.045 45);
+  --primary: oklch(0.58 0.13 40);
+  --primary-foreground: oklch(0.98 0.012 80);
+  --secondary: oklch(0.92 0.035 80);
+  --secondary-foreground: oklch(0.28 0.045 45);
+  --muted: oklch(0.93 0.025 80);
+  --muted-foreground: oklch(0.48 0.04 50);
+  --accent: oklch(0.78 0.13 75);
+  --accent-foreground: oklch(0.28 0.045 45);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.87 0.03 75);
+  --input: oklch(0.87 0.03 75);
+  --ring: oklch(0.78 0.13 75);
+  --honey: oklch(0.78 0.13 75);
+  --terracotta: oklch(0.58 0.13 40);
+  --terracotta-foreground: oklch(0.98 0.012 80);
+  --cream-deep: oklch(0.93 0.035 78);
+  --shadow-warm: 0 18px 40px -18px oklch(0.4 0.08 45 / 0.35);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -95,6 +109,72 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+}
+
+@utility shadow-warm {
+  box-shadow: var(--shadow-warm);
+}
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.8rem 1.4rem;
+  font-weight: 700;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@utility btn-primary {
+  background: var(--terracotta);
+  color: var(--terracotta-foreground);
+  box-shadow: var(--shadow-warm);
+  &:hover {
+    background: color-mix(in oklab, var(--terracotta) 88%, black);
+  }
+}
+
+@utility btn-outline {
+  border: 1.5px solid var(--foreground);
+  color: var(--foreground);
+  &:hover {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+@utility btn-honey {
+  background: var(--honey);
+  color: var(--foreground);
+  &:hover {
+    background: color-mix(in oklab, var(--honey) 88%, black);
+  }
+}
+
+@utility field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--input);
+  background: var(--card);
+  padding: 0.75rem 1rem;
+  &:focus {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  &.in {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .dark {
@@ -141,4 +221,10 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@layer base {
+  body { font-family: var(--font-sans); }
+  h1, h2, h3, h4 { font-family: var(--font-serif); letter-spacing: -0.01em; }
+  html { scroll-behavior: smooth; }
 }
