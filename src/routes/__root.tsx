@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CartProvider } from "@/lib/cart";
+import { Header, Footer, MobileBar } from "@/components/site";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -73,27 +76,44 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+const SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  name: "Майстори Пекари",
+  telephone: "+359888123456",
+  servesCuisine: "Bulgarian",
+  priceRange: "€",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "ж.к. Младост 4, бл. 459",
+    addressLocality: "София",
+    addressCountry: "BG",
+  },
+  aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "120" },
+  openingHours: ["Mo-Fr 06:30-19:00", "Sa 07:00-16:00", "Su 07:30-13:00"],
+};
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Майстори Пекари – пекарна в Младост 4, София" },
+      { name: "description", content: "Едновремешни мекици, пирожки и понички в Младост 4, София." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,500&family=Nunito+Sans:wght@400;600;700&display=swap",
       },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(SCHEMA) }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -103,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="bg">
       <head>
         <HeadContent />
       </head>
@@ -120,8 +140,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CartProvider>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+        <MobileBar />
+        <Toaster position="top-center" />
+      </CartProvider>
     </QueryClientProvider>
   );
 }
