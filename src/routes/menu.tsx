@@ -7,7 +7,7 @@ import { useCart } from "@/lib/cart";
 import { useI18n } from "@/lib/i18n";
 import { pickupDays, slotsFor, sofiaParts, STAMPS_FOR_FREE } from "@/lib/hours";
 import { placeOrder } from "@/lib/orders.functions";
-import { Field, LiveStatus, ProductRow, seo } from "@/components/site";
+import { Field, HeaderSpacer, LiveStatus, ProductCard, seo } from "@/components/site";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
@@ -73,97 +73,104 @@ function MenuPage() {
   if (done) {
     const filled = done.free ? STAMPS_FOR_FREE : done.stamps;
     return (
-      <section className="mx-auto max-w-lg px-5 py-16 text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-success" />
-        <h1 className="mt-4 text-3xl">{t.pre.thanks} {done.name}!</h1>
-        <p className="mt-3 text-lg">{t.pre.ready} <span className="font-hand text-3xl text-primary">{done.time}</span> {t.pre.on} {dayLabel(done.date).toLowerCase()}. {fmt(done.total)} · {t.pre.payAtPickup}</p>
-        <div className="paper mt-8 p-5 text-left">
-          <h2 className="text-xl">{t.pre.stampTitle}</h2>
-          <div className="mt-3 grid grid-cols-5 gap-2">
-            {Array.from({ length: STAMPS_FOR_FREE }).map((_, i) => (
-              <div key={i} className={`grid aspect-square place-items-center rounded-full border-2 border-dashed font-display ${i < filled ? "rotate-[-8deg] border-primary bg-primary text-primary-foreground" : "border-foreground/30 text-foreground/30"}`}>
-                {i === STAMPS_FOR_FREE - 1 ? <Gift className="h-5 w-5" /> : i < filled ? "★" : i + 1}
-              </div>
-            ))}
+      <>
+        <HeaderSpacer />
+        <section className="mx-auto max-w-lg px-5 py-14 text-center md:py-24">
+          <CheckCircle2 className="mx-auto h-12 w-12 text-success" strokeWidth={1.4} />
+          <h1 className="mt-5 text-4xl">{t.pre.thanks} {done.name}!</h1>
+          <p className="mt-4 text-muted-foreground">{t.pre.ready} <span className="font-semibold text-foreground">{done.time}</span> {t.pre.on} {dayLabel(done.date).toLowerCase()}. {fmt(done.total)} · {t.pre.payAtPickup}</p>
+          <div className="card mt-10 p-6 text-left md:p-8">
+            <h2 className="text-2xl">{t.pre.stampTitle}</h2>
+            <div className="mt-5 grid grid-cols-5 gap-3">
+              {Array.from({ length: STAMPS_FOR_FREE }).map((_, i) => (
+                <div key={i} className={`grid aspect-square place-items-center rounded-full border text-sm ${i < filled ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground"}`}>
+                  {i === STAMPS_FOR_FREE - 1 ? <Gift className="h-4 w-4" strokeWidth={1.6} /> : i < filled ? <CheckCircle2 className="h-4 w-4" strokeWidth={1.8} /> : i + 1}
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 font-semibold">{done.free ? t.pre.freeNow : `${filled} ${t.pre.stampOf}`}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t.pre.stampHint}</p>
           </div>
-          <p className="mt-3 font-bold">{done.free ? t.pre.freeNow : `${filled} ${t.pre.stampOf}`}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{t.pre.stampHint}</p>
-        </div>
-        <button className="btn btn-primary mt-8" onClick={() => setDone(null)}>{t.pre.another}</button>
-      </section>
+          <button className="btn btn-primary mt-10" onClick={() => setDone(null)}>{t.pre.another}</button>
+        </section>
+      </>
     );
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-10">
-      <h1 className="enamel px-4 py-2 text-3xl md:text-4xl">{t.menu.title}</h1>
-      <LiveStatus className="mt-4" />
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_400px]">
-        <div className="paper h-fit px-4 md:px-6">
-          {PRODUCTS.map((p) => <ProductRow key={p.id} p={p} />)}
+    <>
+    <HeaderSpacer />
+    <div className="mx-auto max-w-[1200px] px-5 py-14 md:py-20">
+      <h1 className="text-5xl">{t.menu.title}</h1>
+      <p className="mt-3 text-muted-foreground">{t.menu.sub}</p>
+      <LiveStatus className="mt-6" />
+      <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_400px]">
+        <div className="grid h-fit gap-x-8 gap-y-12 sm:grid-cols-2">
+          {PRODUCTS.map((p) => <ProductCard key={p.id} p={p} />)}
         </div>
 
-        <aside id="order" className="paper h-fit scroll-mt-24 p-5 lg:sticky lg:top-24">
-          <p className="enamel enamel-mustard inline-flex items-center gap-2 px-3 py-1 text-sm"><Timer className="h-4 w-4" />{t.pre.badge}</p>
-          <h2 className="mt-3 text-2xl">{t.pre.title}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t.pre.lead}</p>
+        <aside id="order" className="card h-fit scroll-mt-28 p-6 lg:sticky lg:top-28">
+          <p className="inline-flex items-center gap-2 rounded-full bg-tint px-3 py-1 text-xs font-semibold text-primary"><Timer className="h-3.5 w-3.5" />{t.pre.badge}</p>
+          <h2 className="mt-4 text-3xl">{t.pre.title}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{t.pre.lead}</p>
           {lines.length === 0 ? (
-            <p className="mt-4 font-hand text-2xl text-muted-foreground">{t.pre.empty}</p>
+            <p className="mt-6 rounded-xl bg-background p-4 text-sm text-muted-foreground">{t.pre.empty}</p>
           ) : (
             <>
-              <ul className="mt-4 divide-y-2 divide-dashed divide-foreground/20">
+              <ul className="mt-6 divide-y divide-border">
                 {lines.map(({ product: p, qty }) => (
                   <li key={p.id} className="flex items-center gap-3 py-3">
                     <div className="flex-1">
-                      <p className="font-bold leading-tight">{p.name[lang]}</p>
+                      <p className="font-medium leading-tight">{p.name[lang]}</p>
                       <p className="text-sm text-muted-foreground">{fmt(p.price * qty)}</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button aria-label="-" className="rounded-md border-2 border-foreground p-1" onClick={() => setQty(p.id, qty - 1)}><Minus className="h-4 w-4" /></button>
-                      <span className="w-6 text-center font-bold">{qty}</span>
-                      <button aria-label="+" className="rounded-md border-2 border-foreground p-1" onClick={() => setQty(p.id, qty + 1)}><Plus className="h-4 w-4" /></button>
-                      <button aria-label="Remove" className="ml-1 p-1 text-muted-foreground" onClick={() => setQty(p.id, 0)}><Trash2 className="h-4 w-4" /></button>
+                      <button aria-label="-" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(p.id, qty - 1)}><Minus className="h-3.5 w-3.5" /></button>
+                      <span className="w-6 text-center text-sm font-semibold">{qty}</span>
+                      <button aria-label="+" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(p.id, qty + 1)}><Plus className="h-3.5 w-3.5" /></button>
+                      <button aria-label="Remove" className="ml-1 p-1.5 text-muted-foreground" onClick={() => setQty(p.id, 0)}><Trash2 className="h-4 w-4" strokeWidth={1.6} /></button>
                     </div>
                   </li>
                 ))}
               </ul>
-              <div className="mt-2 flex items-baseline justify-between border-t-2 border-foreground pt-3">
-                <span className="font-display uppercase">{t.pre.total}</span><span className="font-hand text-4xl text-primary">{fmt(total)}</span>
+              <div className="mt-2 flex items-baseline justify-between border-t border-border pt-4">
+                <span className="text-sm text-muted-foreground">{t.pre.total}</span><span className="text-xl font-semibold">{fmt(total)}</span>
               </div>
 
-              <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
+              <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
                 <div>
-                  <p className="text-sm font-bold">{t.pre.day}</p>
-                  <div className="mt-1 flex gap-2">
+                  <p className="text-sm font-medium">{t.pre.day}</p>
+                  <div className="mt-2 flex gap-2">
                     {days.map((d) => (
-                      <button type="button" key={d} onClick={() => { setDay(d); setTime(""); }} className={`flex-1 rounded-md border-2 px-2 py-2 text-sm font-bold ${d === day ? "border-foreground bg-foreground text-background" : "border-foreground/40"}`}>{dayLabel(d)}</button>
+                      <button type="button" key={d} aria-pressed={d === day} onClick={() => { setDay(d); setTime(""); }} className="chip flex-1">{dayLabel(d)}</button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm font-bold">{t.pre.time}</p>
-                  {slots.length === 0 ? <p className="text-sm text-muted-foreground">{t.pre.noSlots}</p> : (
-                    <div className="mt-1 grid max-h-44 grid-cols-4 gap-1.5 overflow-y-auto pr-1">
+                  <p className="text-sm font-medium">{t.pre.time}</p>
+                  {slots.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t.pre.noSlots}</p> : (
+                    <div className="mt-2 grid max-h-44 grid-cols-4 gap-2 overflow-y-auto pr-1">
                       {slots.map((s) => (
-                        <button type="button" key={s} onClick={() => setTime(s)} className={`rounded-md border-2 py-1.5 text-sm font-bold ${s === time ? "border-primary bg-primary text-primary-foreground" : "border-foreground/30"}`}>{s}</button>
+                        <button type="button" key={s} aria-pressed={s === time} onClick={() => setTime(s)} className="chip tabular-nums">{s}</button>
                       ))}
                     </div>
                   )}
-                  {errors["time"] && <span className="mt-1 block text-sm text-destructive">{errors["time"]}</span>}
+                  {errors["time"] && <span className="mt-1 block text-xs text-destructive">{errors["time"]}</span>}
                 </div>
                 <Field label={t.pre.name} name="name" error={errors["name"]} />
                 <Field label={t.pre.phone} name="phone" type="tel" error={errors["phone"]} />
-                <label className="block text-sm font-bold">{t.pre.notes}
-                  <textarea name="notes" maxLength={500} rows={2} className="field mt-1 font-normal" />
+                <label className="block text-sm font-medium">{t.pre.notes}
+                  <textarea name="notes" maxLength={500} rows={2} className="field mt-1.5 font-normal" />
                 </label>
-                {errors["form"] && <p className="text-sm font-bold text-destructive">{errors["form"]}</p>}
+                {errors["form"] && <p className="text-sm text-destructive">{errors["form"]}</p>}
                 <button disabled={busy} className="btn btn-primary w-full">{busy ? t.pre.sending : `${t.pre.submit} · ${fmt(total)}`}</button>
-                <p className="flex items-center gap-2 text-xs text-muted-foreground"><Gift className="h-4 w-4" />{t.pre.stampHint}</p>
+                <p className="flex items-center gap-2 text-xs text-muted-foreground"><Gift className="h-4 w-4 shrink-0" strokeWidth={1.6} />{t.pre.stampHint}</p>
               </form>
             </>
           )}
         </aside>
       </div>
     </div>
+    </>
   );
 }
