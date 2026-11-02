@@ -49,7 +49,7 @@ export function Header() {
     <header className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${overHero ? "bg-transparent text-ink-foreground" : "border-b border-border bg-card/95 text-foreground backdrop-blur"}`}>
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-5 md:h-20">
         <Link to="/" className="flex items-center" aria-label="Майстори Пекари">
-          <img src={logoLight} alt="Майстори Пекари" className="h-10 w-auto md:h-12" />
+          <img src={overHero ? logoDark : logoLight} alt="Майстори Пекари" className="h-11 w-auto md:h-14" />
         </Link>
         <div className="flex items-center gap-5 md:gap-8">
           <nav className="hidden gap-8 text-sm font-medium md:flex">
