@@ -1,4 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import logoLight from "@/assets/logo-light.png";
+import logoDark from "@/assets/logo-dark.png";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Phone, ShoppingBag, Menu, X, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -46,7 +48,9 @@ export function Header() {
   return (
     <header className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${overHero ? "bg-transparent text-ink-foreground" : "border-b border-border bg-card/95 text-foreground backdrop-blur"}`}>
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-5 md:h-20">
-        <Link to="/" className="font-display text-xl font-medium tracking-tight md:text-2xl">Майстори Пекари</Link>
+        <Link to="/" className="flex items-center" aria-label="Майстори Пекари">
+          <img src={overHero ? logoDark : logoLight} alt="Майстори Пекари" className="h-11 w-auto md:h-14" />
+        </Link>
         <div className="flex items-center gap-5 md:gap-8">
           <nav className="hidden gap-8 text-sm font-medium md:flex">
             {NAV.map((n) => (
@@ -115,7 +119,7 @@ export function Footer() {
     <footer className="bg-ink pb-32 pt-16 text-ink-foreground md:pb-16 md:pt-24">
       <div className="mx-auto grid max-w-[1200px] gap-12 px-5 md:grid-cols-3">
         <div>
-          <p className="font-display text-2xl">Майстори Пекари</p>
+          <img src={logoDark} alt="Майстори Пекари" className="h-14 w-auto md:h-16" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed opacity-70">{t.footer}</p>
         </div>
         <div className="space-y-3 text-sm opacity-80">
