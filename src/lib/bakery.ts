@@ -1,69 +1,47 @@
 import mekitsi from "@/assets/mekitsi.jpg";
-import banitsa from "@/assets/banitsa.jpg";
 import pirozhki from "@/assets/pirozhki.jpg";
-import donuts from "@/assets/donuts.jpg";
-import bread from "@/assets/bread.jpg";
-import yogurt from "@/assets/yogurt.jpg";
+import buhti from "@/assets/donuts.jpg";
 
+// PLACEHOLDER contact details — replace with the real ones.
 export const BUSINESS = {
   name: "Майстори Пекари",
   phone: "+359 88 812 3456",
   phoneHref: "tel:+359888123456",
   viber: "viber://chat?number=%2B359888123456",
   email: "zdravei@maistoripekari.bg",
-  address: "ж.к. Младост 4, бл. 459, София",
+  address: { bg: "ж.к. Младост 4, бл. 459, София", en: "Mladost 4, bl. 459, Sofia" },
   facebook: "https://facebook.com/",
-  hours: [
-    ["Понеделник – Петък", "06:30 – 19:00"],
-    ["Събота", "07:00 – 16:00"],
-    ["Неделя", "07:30 – 13:00"],
-  ],
   mapSrc:
     "https://www.google.com/maps?q=%D0%9C%D0%BB%D0%B0%D0%B4%D0%BE%D1%81%D1%82+4+%D0%B1%D0%BB.+459+%D0%A1%D0%BE%D1%84%D0%B8%D1%8F&output=embed",
 };
 
+/** Hero video slot: drop a 5–8 s muted clip at public/videos/mekitsi-frying.mp4 and set this path. */
+export const HERO_VIDEO_SRC = "";
+
 export type Product = {
   id: string;
-  name: string;
-  desc: string;
-  price: number;
+  name: { bg: string; en: string };
+  desc: { bg: string; en: string };
+  price: number; // EUR
+  bgn: number; // BGN shown smaller
   image: string;
-  category: string;
-  bestseller?: boolean;
+  isMekitsa?: boolean;
 };
 
-export const CATEGORIES: string[] = [
-  "Мекици и бухтички",
-  "Баници",
-  "Пирожки и закуски",
-  "Понички и сладки",
-  "Хляб",
-  "Млечни продукти",
-];
-
 export const PRODUCTS: Product[] = [
-  { id: "mekitsi20", name: "Мекици 20 бр.", desc: "Със сладко, сирене и пудра захар", price: 27.61, image: mekitsi, category: CATEGORIES[0]!, bestseller: true },
-  { id: "buhti8", name: "Солени бухти 8 бр.", desc: "Пухкави, като от баба", price: 5.11, image: mekitsi, category: CATEGORIES[0]!, bestseller: true },
-  { id: "mekitsi5", name: "Мекици 5 бр.", desc: "С пудра захар", price: 6.9, image: mekitsi, category: CATEGORIES[0]! },
-  { id: "banitsa-cheese", name: "Баница със сирене", desc: "Точена, с фермерско сирене – тава 1 кг", price: 12.5, image: banitsa, category: CATEGORIES[1]!, bestseller: true },
-  { id: "banitsa-spinach", name: "Баница със спанак", desc: "Със спанак и сирене – тава 1 кг", price: 13.2, image: banitsa, category: CATEGORIES[1]! },
-  { id: "banitsa-slice", name: "Баница – парче", desc: "Прясна, всяка сутрин", price: 1.8, image: banitsa, category: CATEGORIES[1]! },
-  { id: "pirozhki6", name: "Пирожки 6 бр.", desc: "С кайма, картофи или сирене", price: 7.4, image: pirozhki, category: CATEGORIES[2]!, bestseller: true },
-  { id: "pirozhki-cheese", name: "Пирожка със сирене", desc: "Пържена, златиста", price: 1.4, image: pirozhki, category: CATEGORIES[2]! },
-  { id: "ponichki10", name: "Понички 10 бр.", desc: "Едновремешни, със захар", price: 8.6, image: donuts, category: CATEGORIES[3]!, bestseller: true },
-  { id: "ponichka-jam", name: "Поничка със сладко", desc: "С домашно сладко от вишни", price: 1.3, image: donuts, category: CATEGORIES[3]! },
-  { id: "sourdough", name: "Хляб с квас", desc: "Био брашно, 24 ч ферментация – 800 г", price: 4.9, image: bread, category: CATEGORIES[4]!, bestseller: true },
-  { id: "rye", name: "Ръжен хляб", desc: "Пълнозърнест, с квас – 600 г", price: 4.2, image: bread, category: CATEGORIES[4]! },
-  { id: "yogurt", name: "Кисело мляко", desc: "С жива закваска, в глинено гърне – 500 г", price: 3.8, image: yogurt, category: CATEGORIES[5]! },
-  { id: "cheese", name: "Фермерско сирене", desc: "Краве сирене от ферма – 400 г", price: 6.5, image: yogurt, category: CATEGORIES[5]! },
+  { id: "mekitsa1", name: { bg: "Мекица 1 бр.", en: "Mekitsa ×1" }, desc: { bg: "Гореща, току-що изпържена", en: "Hot, freshly fried" }, price: 1.38, bgn: 2.7, image: mekitsi, isMekitsa: true },
+  { id: "mekitsi3", name: { bg: "Мекици 3 бр.", en: "Mekitsi ×3" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 5.36, bgn: 10.48, image: mekitsi },
+  { id: "mekitsi20", name: { bg: "Мекици 20 бр.", en: "Mekitsi ×20" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 27.6, bgn: 53.98, image: mekitsi },
+  { id: "pirozhki3", name: { bg: "Пирожки 3 бр.", en: "Pirozhki ×3" }, desc: { bg: "Пържени, златисти", en: "Fried, golden" }, price: 5.87, bgn: 11.48, image: pirozhki },
+  { id: "buhti", name: { bg: "Солени бухти", en: "Savoury buhti" }, desc: { bg: "Пухкави, като от баба", en: "Fluffy, just like grandma's" }, price: 5.11, bgn: 9.99, image: buhti },
 ];
 
+// PLACEHOLDER reviews — replace with real customer reviews.
 export const REVIEWS = [
-  { name: "Мария П.", text: "Мекиците са точно като на баба ми! Всяка събота сме тук с децата." },
-  { name: "Георги Д.", text: "Най-хубавата баница в Младост. Хрупкава и с истинско сирене." },
-  { name: "Елена К.", text: "Поръчах закуски за офиса – всички питаха откъде са. Ще поръчаме пак." },
-  { name: "Иван Т.", text: "Хлябът с квас е уникален. Личи си, че е с качествено брашно." },
-  { name: "Десислава М.", text: "Топло, уютно и винаги усмихнати. Пирожките са любими!" },
+  { name: "Мария П.", text: { bg: "Мекиците са точно като на баба ми!", en: "The mekitsi taste just like my grandma's!" } },
+  { name: "Георги Д.", text: { bg: "Горещи и хрупкави всяка сутрин.", en: "Hot and crispy every morning." } },
+  { name: "Елена К.", text: { bg: "Поръчах за офиса – всички питаха откъде са.", en: "Ordered for the office – everyone asked where they were from." } },
 ];
 
 export const fmt = (n: number) => n.toFixed(2).replace(".", ",") + " €";
+export const fmtBgn = (n: number) => n.toFixed(2).replace(".", ",") + " лв.";
