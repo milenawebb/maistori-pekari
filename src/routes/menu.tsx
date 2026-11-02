@@ -97,7 +97,7 @@ function MenuPage() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-10">
       <h1 className="enamel px-4 py-2 text-3xl md:text-4xl">{t.menu.title}</h1>
-      <LiveStatus className="mt-4 [&>span:first-child]:text-foreground" />
+      <LiveStatus className="mt-4" />
       <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_400px]">
         <div className="paper h-fit px-4 md:px-6">
           {PRODUCTS.map((p) => <ProductRow key={p.id} p={p} />)}

@@ -87,8 +87,8 @@ export function LiveStatus({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
       {open !== null && (
-        <span className={`inline-flex items-center gap-2 rounded-md border-2 px-3 py-1 font-display text-sm uppercase ${open ? "border-success bg-success text-success-foreground" : "border-background/60 bg-foreground/60 text-background"}`}>
-          <span className={`h-2.5 w-2.5 rounded-full ${open ? "animate-pulse bg-success-foreground" : "bg-background/60"}`} />
+        <span className={`inline-flex items-center gap-2 rounded-md border-2 px-3 py-1 font-display text-sm uppercase ${open ? "border-success bg-success text-success-foreground" : "border-foreground bg-foreground text-background"}`}>
+          <span className={`h-2.5 w-2.5 rounded-full ${open ? "animate-pulse bg-success-foreground" : "bg-primary"}`} />
           {open ? t.open : t.closed}
         </span>
       )}
