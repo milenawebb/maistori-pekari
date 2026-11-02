@@ -23,10 +23,10 @@ export const BUSINESS = {
 /** Hero video slot: drop a 5–8 s muted clip at public/videos/mekitsi-frying.mp4 and set this path. */
 export const HERO_VIDEO_SRC = "";
 
-// Client's own photos, served from the asset CDN. Key = lowercase filename without extension.
-const pointers = import.meta.glob<{ url: string }>("../assets/menu/*.asset.json", { eager: true, import: "default" });
+// Client's own photos, bundled by Vite from src/assets/menu. Key = lowercase filename without extension.
+const files = import.meta.glob<string>("../assets/menu/*.jpg", { eager: true, import: "default" });
 const IMG: Record<string, string> = Object.fromEntries(
-  Object.entries(pointers).map(([path, p]) => [path.split("/").pop()!.replace(".jpg.asset.json", ""), p.url]),
+  Object.entries(files).map(([path, url]) => [path.split("/").pop()!.replace(".jpg", ""), url]),
 );
 const img = (k: string) => IMG[k] ?? fallbackSweet;
 
