@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as MenuRouteImport } from './routes/menu'
@@ -17,6 +18,11 @@ import { Route as MenuRouteImport } from './routes/menu'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -37,12 +43,14 @@ const MenuRoute = MenuRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/catering': typeof CateringRoute
   '/contacts': typeof ContactsRoute
   '/menu': typeof MenuRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/catering': typeof CateringRoute
   '/contacts': typeof ContactsRoute
   '/menu': typeof MenuRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/catering': typeof CateringRoute
   '/contacts': typeof ContactsRoute
   '/menu': typeof MenuRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catering' | '/contacts' | '/menu'
+  fullPaths: '/' | '/auth' | '/catering' | '/contacts' | '/menu'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catering' | '/contacts' | '/menu'
-  id: '__root__' | '/' | '/catering' | '/contacts' | '/menu'
+  to: '/' | '/auth' | '/catering' | '/contacts' | '/menu'
+  id: '__root__' | '/' | '/auth' | '/catering' | '/contacts' | '/menu'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CateringRoute: typeof CateringRoute
   ContactsRoute: typeof ContactsRoute
   MenuRoute: typeof MenuRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CateringRoute: CateringRoute,
   ContactsRoute: ContactsRoute,
   MenuRoute: MenuRoute,
