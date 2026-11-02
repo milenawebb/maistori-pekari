@@ -82,16 +82,19 @@ const SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Bakery",
   name: "Майстори Пекари",
-  telephone: "+359888123456",
+  telephone: "+359897825208",
+  legalName: "Майстори пекари ЕООД",
+  taxID: "208068667",
   servesCuisine: "Bulgarian",
   priceRange: "€",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "ж.к. Младост 4, бл. 459",
+    streetAddress: "ж.к. Младост 4, бл. 459, срещу Бизнес Парк",
+    postalCode: "1715",
     addressLocality: "София",
     addressCountry: "BG",
   },
-  openingHours: ["Mo-Fr 06:30-19:00", "Sa 07:00-16:00", "Su 07:30-13:00"],
+  // TODO: add openingHours once real hours are confirmed.
 };
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

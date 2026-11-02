@@ -30,8 +30,8 @@ function Contacts() {
           </div>
           <div className="card space-y-4 p-6">
             <p className="flex gap-3"><MapPin className="h-5 w-5 text-primary" strokeWidth={1.5} />{BUSINESS.address[lang]}</p>
-            <a href={`mailto:${BUSINESS.email}`} className="flex gap-3"><Mail className="h-5 w-5 text-primary" strokeWidth={1.5} />{BUSINESS.email}</a>
-            <a href={BUSINESS.facebook} target="_blank" rel="noreferrer" className="flex gap-3"><Facebook className="h-5 w-5 text-primary" strokeWidth={1.5} />Facebook</a>
+            {BUSINESS.email && <a href={`mailto:${BUSINESS.email}`} className="flex gap-3"><Mail className="h-5 w-5 text-primary" strokeWidth={1.5} />{BUSINESS.email}</a>}
+            {BUSINESS.facebook && <a href={BUSINESS.facebook} target="_blank" rel="noreferrer" className="flex gap-3"><Facebook className="h-5 w-5 text-primary" strokeWidth={1.5} />Facebook</a>}
           </div>
           <div className="card p-6">
             <h2 className="mb-3 text-2xl">{t.hours.title}</h2>
