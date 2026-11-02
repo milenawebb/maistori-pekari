@@ -13,6 +13,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "@/lib/cart";
+import { LangProvider } from "@/lib/i18n";
+import { supabase } from "@/integrations/supabase/client";
 import { Header, Footer, MobileBar } from "@/components/site";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -89,7 +91,6 @@ const SCHEMA = {
     addressLocality: "София",
     addressCountry: "BG",
   },
-  aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "120" },
   openingHours: ["Mo-Fr 06:30-19:00", "Sa 07:00-16:00", "Su 07:30-13:00"],
 };
 
@@ -108,7 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,500&family=Nunito+Sans:wght@400;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=PT+Sans:wght@400;700&family=Russo+One&display=swap",
       },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
@@ -137,9 +138,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
+      <LangProvider>
       <CartProvider>
         <Header />
         <main>
@@ -149,6 +160,7 @@ function RootComponent() {
         <MobileBar />
         <Toaster position="top-center" />
       </CartProvider>
+      </LangProvider>
     </QueryClientProvider>
   );
 }
