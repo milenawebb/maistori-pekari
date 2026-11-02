@@ -5,18 +5,13 @@ import { isFreeOrder, isOpenAt, slotsFor, sofiaToIso } from "@/lib/hours";
 
 const p = (id: string) => PRODUCTS.find((x) => x.id === id)!;
 
-describe("real menu prices", () => {
-  it("has exactly the five real products with EUR and BGN prices", () => {
-    expect(PRODUCTS.map((x) => [x.id, x.price, x.bgn])).toEqual([
-      ["mekitsa1", 1.38, 2.7],
-      ["mekitsi3", 5.36, 10.48],
-      ["mekitsi20", 27.6, 53.98],
-      ["pirozhki3", 5.87, 11.48],
-      ["buhti", 5.11, 9.99],
-    ]);
+describe("menu prices", () => {
+  it("keeps the old-site prices for мекица and солени бухти", () => {
+    expect([p("mekitsa").price, p("mekitsa").bgn]).toEqual([0.77, 1.5]);
+    expect([p("buhti-savoury").price, p("buhti-savoury").bgn]).toEqual([15.38, 30]);
   });
-  it("sums 2× мекици 20 бр. and 1× солени бухти", () => {
-    expect(cartTotal([{ product: p("mekitsi20"), qty: 2 }, { product: p("buhti"), qty: 1 }])).toBe(60.31);
+  it("sums 2× мекица and 0.5 kg солени бухти", () => {
+    expect(cartTotal([{ unit: 0.77, qty: 2 }, { unit: 15.38, qty: 0.5 }])).toBe(9.23);
   });
 });
 

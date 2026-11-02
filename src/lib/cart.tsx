@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { findProduct, KG_STEP, unitPrice, type Product } from "./bakery";
 
-export type Line = { key: string; product: Product; variant?: string; qty: number; unit: number };
+export type Line = { key: string; product: Product; variant?: string | undefined; qty: number; unit: number };
 type Ctx = {
   lines: Line[];
   add: (id: string, variant?: string) => void;

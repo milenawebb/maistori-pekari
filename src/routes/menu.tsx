@@ -118,17 +118,17 @@ function MenuPage() {
           ) : (
             <>
               <ul className="mt-6 divide-y divide-border">
-                {lines.map(({ product: p, qty }) => (
-                  <li key={p.id} className="flex items-center gap-3 py-3">
+                {lines.map(({ key, product: p, qty, unit }) => (
+                  <li key={key} className="flex items-center gap-3 py-3">
                     <div className="flex-1">
                       <p className="font-medium leading-tight">{p.name[lang]}</p>
-                      <p className="text-sm text-muted-foreground">{fmt(p.price * qty)}</p>
+                      <p className="text-sm text-muted-foreground">{fmt(unit * qty)}</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button aria-label="-" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(p.id, qty - 1)}><Minus className="h-3.5 w-3.5" /></button>
+                      <button aria-label="-" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(key, qty - 1)}><Minus className="h-3.5 w-3.5" /></button>
                       <span className="w-6 text-center text-sm font-semibold">{qty}</span>
-                      <button aria-label="+" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(p.id, qty + 1)}><Plus className="h-3.5 w-3.5" /></button>
-                      <button aria-label="Remove" className="ml-1 p-1.5 text-muted-foreground" onClick={() => setQty(p.id, 0)}><Trash2 className="h-4 w-4" strokeWidth={1.6} /></button>
+                      <button aria-label="+" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(key, qty + 1)}><Plus className="h-3.5 w-3.5" /></button>
+                      <button aria-label="Remove" className="ml-1 p-1.5 text-muted-foreground" onClick={() => setQty(key, 0)}><Trash2 className="h-4 w-4" strokeWidth={1.6} /></button>
                     </div>
                   </li>
                 ))}
