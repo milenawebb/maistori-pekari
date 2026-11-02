@@ -1,3 +1,6 @@
+// TODO: real opening hours are NOT confirmed yet. Keep HOURS_CONFIRMED=false until the owner confirms them;
+// while false the open/closed badge is hidden (slot logic still uses HOURS).
+export const HOURS_CONFIRMED = false;
 // Opening hours in Sofia local time, by weekday (0 = Sunday). PLACEHOLDER — replace with real hours.
 export const HOURS: Record<number, [string, string]> = {
   0: ["07:30", "13:00"],

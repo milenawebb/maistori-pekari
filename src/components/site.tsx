@@ -3,8 +3,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Phone, ShoppingBag, Menu, X, MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { BUSINESS, fmt, fmtBgn, type Product } from "@/lib/bakery";
-import { HOURS, isOpenAt } from "@/lib/hours";
+import { BUSINESS, fmt, fmtBgn, unitPrice, type Product } from "@/lib/bakery";
+import { HOURS, HOURS_CONFIRMED, isOpenAt } from "@/lib/hours";
 import { useCart } from "@/lib/cart";
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
@@ -95,6 +95,10 @@ export function LiveStatus({ className = "", overlay = false }: { className?: st
     const id = setInterval(tick, 60_000);
     return () => clearInterval(id);
   }, []);
+  if (!HOURS_CONFIRMED) {
+    if (!fresh.data) return null;
+    return <div className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium ${overlay ? "bg-card/15 text-ink-foreground ring-1 ring-card/30 backdrop-blur-md" : "bg-tint text-foreground"} ${className}`}>{t.fresh} {fresh.data}</div>;
+  }
   if (open === null) return <div className={`h-8 ${className}`} />;
   return (
     <div className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium ${overlay ? "bg-card/15 text-ink-foreground ring-1 ring-card/30 backdrop-blur-md" : "bg-tint text-foreground"} ${className}`}>
@@ -117,6 +121,7 @@ export function Footer() {
         <div className="space-y-3 text-sm opacity-80">
           <p className="flex gap-3"><MapPin className="h-4 w-4 shrink-0" strokeWidth={1.6} />{BUSINESS.address[lang]}</p>
           <a href={BUSINESS.phoneHref} className="flex gap-3"><Phone className="h-4 w-4" strokeWidth={1.6} />{BUSINESS.phone}</a>
+          <p className="pt-2 text-xs opacity-70">{BUSINESS.company} · ЕИК {BUSINESS.eik}</p>
         </div>
         <div className="text-sm opacity-80"><Hours dark /></div>
       </div>
@@ -164,21 +169,44 @@ export function Price({ eur, bgn, className = "" }: { eur: number; bgn: number; 
 export function ProductCard({ p }: { p: Product }) {
   const { add } = useCart();
   const { t, lang } = useI18n();
+  const [variant, setVariant] = useState(p.variants?.[0]?.id);
+  const [gallery, setGallery] = useState(false);
+  const u = unitPrice(p, variant);
+  const per = p.unit === "kg" ? (lang === "bg" ? "/кг" : "/kg") : "";
   return (
     <article className="group flex flex-col">
-      <div className="overflow-hidden rounded-[18px] bg-tint">
-        <img src={p.image} alt={p.name[lang]} loading="lazy" width={1024} height={768} className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
-      </div>
+      <button type="button" onClick={() => p.gallery && setGallery(true)} className="relative overflow-hidden rounded-[18px] bg-tint" aria-label={p.name[lang]}>
+        <img src={p.image} alt={p.name[lang]} loading="lazy" width={1000} height={750} className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
+        {p.tags && <span className="absolute left-3 top-3 flex gap-1.5">{p.tags.map((g) => <span key={g} className="rounded-full bg-card px-2.5 py-1 text-xs font-semibold text-primary shadow-soft">{t.tags[g]}</span>)}</span>}
+        {p.gallery && <span className="absolute bottom-3 right-3 rounded-full bg-card px-2.5 py-1 text-xs font-semibold shadow-soft">{t.menu.gallery} ({p.gallery.length})</span>}
+      </button>
       <div className="flex flex-1 flex-col pt-4">
         <h3 className="text-xl">{p.name[lang]}</h3>
-        <p className="mt-0.5 text-xs text-muted-foreground">{p.weight[lang]}</p>
-        <p className="mt-1 flex-1 text-sm text-muted-foreground">{p.desc[lang]}</p>
-        <p className="mt-2 text-xs text-muted-foreground/80"><span className="font-medium">{t.allergens.label}:</span> {p.allergens.map((a) => t.allergens[a]).join(", ")}</p>
-        <div className="mt-4 flex items-center justify-between">
-          <Price eur={p.price} bgn={p.bgn} />
-          <button className="btn btn-secondary px-4 py-2 text-sm" onClick={() => { add(p.id); toast.success(`${p.name[lang]} ✓`); }}>{t.menu.add}</button>
+        {p.weight && <p className="mt-0.5 text-xs text-muted-foreground">{p.weight[lang]}</p>}
+        {p.desc && <p className="mt-1 text-sm text-muted-foreground">{p.desc[lang]}</p>}
+        {p.allergens.length > 0 && <p className="mt-2 text-xs text-muted-foreground/80"><span className="font-medium">{t.allergens.label}:</span> {p.allergens.map((a) => t.allergens[a]).join(", ")}</p>}
+        {p.variants && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {p.variants.map((v) => <button key={v.id} type="button" aria-pressed={v.id === variant} onClick={() => setVariant(v.id)} className="chip px-3 py-1 text-xs">{v.name[lang]}</button>)}
+          </div>
+        )}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+          {u ? <span className="inline-flex items-baseline gap-2"><span className="font-semibold">{fmt(u.eur)}{per}{p.extra ? ` ${p.extra[lang]}` : ""}</span><span className="text-xs text-muted-foreground">{fmtBgn(u.bgn)}{per}</span></span> : <span className="font-semibold">{t.menu.onRequest}</span>}
+          {u ? (
+            <button className="btn btn-secondary px-4 py-2 text-sm" onClick={() => { add(p.id, variant); toast.success(`${p.name[lang]} ✓`); }}>{t.menu.add}{p.unit === "kg" ? " 0,5 кг" : ""}</button>
+          ) : (
+            <a href={BUSINESS.phoneHref} className="btn btn-secondary px-4 py-2 text-sm"><Phone className="h-4 w-4" />{t.call}</a>
+          )}
         </div>
       </div>
+      {gallery && p.gallery && (
+        <div role="dialog" aria-modal className="fixed inset-0 z-[60] overflow-y-auto bg-ink/90 p-5" onClick={() => setGallery(false)}>
+          <button className="fixed right-5 top-5 rounded-full bg-card p-2" aria-label="Close"><X className="h-5 w-5" /></button>
+          <div className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
+            {p.gallery.map((g) => <img key={g} src={g} alt={p.name[lang]} loading="lazy" className="w-full rounded-[14px]" />)}
+          </div>
+        </div>
+      )}
     </article>
   );
 }

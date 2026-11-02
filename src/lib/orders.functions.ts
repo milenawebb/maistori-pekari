@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { PRODUCTS } from "./bakery";
+import { findProduct, unitPrice, validQty } from "./bakery";
 import { isFreeOrder, slotsFor, sofiaToIso, STAMPS_FOR_FREE } from "./hours";
 
 const phoneRe = /^[+\d\s()-]{8,20}$/;
@@ -18,7 +18,7 @@ const orderSchema = z.object({
   time: z.string().regex(/^\d{2}:\d{2}$/),
   notes: z.string().trim().max(500).optional(),
   lang: z.enum(["bg", "en"]),
-  items: z.array(z.object({ id: z.string(), qty: z.number().int().min(1).max(100) })).min(1).max(20),
+  items: z.array(z.object({ id: z.string(), variant: z.string().optional(), qty: z.number().min(0.5).max(100) })).min(1).max(40),
 });
 
 export const placeOrder = createServerFn({ method: "POST" })
@@ -26,9 +26,11 @@ export const placeOrder = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     if (!slotsFor(data.date, new Date()).includes(data.time)) throw new Error("SLOT_UNAVAILABLE");
     const lines = data.items.map((i) => {
-      const p = PRODUCTS.find((x) => x.id === i.id);
-      if (!p) throw new Error("BAD_ITEM");
-      return { id: p.id, name: p.name.bg, qty: i.qty, price: p.price };
+      const p = findProduct(i.id);
+      const u = p && unitPrice(p, i.variant);
+      if (!p || !u || !validQty(p, i.qty)) throw new Error("BAD_ITEM");
+      const v = p.variants?.find((x) => x.id === i.variant);
+      return { id: p.id, name: p.name.bg + (v ? ` (${v.name.bg})` : "") + (p.unit === "kg" ? " /кг" : ""), qty: i.qty, price: u.eur };
     });
     const total = Math.round(lines.reduce((s, l) => s + l.price * l.qty, 0) * 100) / 100;
     const phone = normPhone(data.phone);

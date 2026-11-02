@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Flame, Wheat, Clock, Building2, Phone, MapPin } from "lucide-react";
 import hero from "@/assets/hero-mekitsi.jpg";
 import interior from "@/assets/bakery-interior.jpg";
-import { BUSINESS, HERO_VIDEO_SRC, PRODUCTS, REVIEWS } from "@/lib/bakery";
+import { BUSINESS, FEATURED, findProduct, HERO_VIDEO_SRC, REVIEWS } from "@/lib/bakery";
 import { useI18n } from "@/lib/i18n";
 import { Hours, LiveStatus, MapEmbed, ProductCard, Reveal, seo } from "@/components/site";
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: seo(
       "Майстори Пекари – горещи мекици всяка сутрин | Младост 4, София",
-      "Пресни пържени мекици, пирожки и солени бухти в Младост 4. Поръчай предварително и вземи без опашка.",
+      "Едновремешни мекици, пирожки, понички, погачи, козунаци, баници, закуски и сладкиши – приготвени на място в Младост 4, срещу Бизнес Парк. Поръчай и вземи без опашка.",
     ),
   }),
   component: Home,
@@ -55,13 +55,13 @@ function Home() {
         <Reveal className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="eyebrow">{t.story.k}</p>
-            <h2 className="mt-3 text-4xl md:text-5xl">{t.menu.title}</h2>
+            <h2 className="mt-3 text-4xl md:text-5xl">{t.menu.loved}</h2>
             <p className="mt-3 max-w-md text-muted-foreground">{t.menu.sub}</p>
           </div>
-          <Link to="/menu" hash="order" className="btn btn-primary self-start md:self-auto">{t.hero.cta}</Link>
+          <Link to="/menu" className="btn btn-primary self-start md:self-auto">{t.menu.full}</Link>
         </Reveal>
         <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {PRODUCTS.map((p) => <Reveal key={p.id}><ProductCard p={p} /></Reveal>)}
+          {FEATURED.map((id) => findProduct(id)!).map((p) => <Reveal key={p.id}><ProductCard p={p} /></Reveal>)}
         </div>
       </section>
 

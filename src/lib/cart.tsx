@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { PRODUCTS, type Product } from "./bakery";
+import { findProduct, KG_STEP, unitPrice, type Product } from "./bakery";
 
-type Line = { product: Product; qty: number };
+export type Line = { key: string; product: Product; variant?: string; qty: number; unit: number };
 type Ctx = {
   lines: Line[];
-  add: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
+  add: (id: string, variant?: string) => void;
+  setQty: (key: string, qty: number) => void;
   clear: () => void;
   total: number;
   count: number;
@@ -13,39 +13,56 @@ type Ctx = {
 
 const CartCtx = createContext<Ctx | null>(null);
 
-export function cartTotal(lines: Line[]) {
-  return Math.round(lines.reduce((s, l) => s + l.product.price * l.qty, 0) * 100) / 100;
+export const lineKey = (id: string, variant?: string) => (variant ? `${id}:${variant}` : id);
+export const stepOf = (p: Product) => (p.unit === "kg" ? KG_STEP : 1);
+
+export function cartTotal(lines: { unit: number; qty: number }[]) {
+  return Math.round(lines.reduce((s, l) => s + l.unit * l.qty, 0) * 100) / 100;
+}
+
+/** Turn stored {key: qty} into priced lines, dropping anything no longer orderable. */
+export function toLines(items: Record<string, number>): Line[] {
+  return Object.entries(items).flatMap(([key, qty]) => {
+    const [id, variant] = key.split(":");
+    const product = findProduct(id!);
+    const price = product && unitPrice(product, variant);
+    if (!product || !price || qty <= 0) return [];
+    return [{ key, product, variant, qty, unit: price.eur }];
+  });
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Record<string, number>>({});
   useEffect(() => {
     try {
-      const s = localStorage.getItem("mp-cart");
+      const s = localStorage.getItem("mp-cart2");
       if (s) setItems(JSON.parse(s));
     } catch {}
   }, []);
   useEffect(() => {
-    localStorage.setItem("mp-cart", JSON.stringify(items));
+    localStorage.setItem("mp-cart2", JSON.stringify(items));
   }, [items]);
 
-  const lines = Object.entries(items)
-    .map(([id, qty]) => ({ product: PRODUCTS.find((p) => p.id === id)!, qty }))
-    .filter((l) => l.product && l.qty > 0);
+  const lines = toLines(items);
 
   const value: Ctx = {
     lines,
-    add: (id) => setItems((s) => ({ ...s, [id]: (s[id] ?? 0) + 1 })),
-    setQty: (id, qty) =>
+    add: (id, variant) => {
+      const p = findProduct(id);
+      if (!p) return;
+      const k = lineKey(id, variant);
+      setItems((s) => ({ ...s, [k]: Math.round(((s[k] ?? 0) + stepOf(p)) * 10) / 10 }));
+    },
+    setQty: (key, qty) =>
       setItems((s) => {
         const n = { ...s };
-        if (qty <= 0) delete n[id];
-        else n[id] = qty;
+        if (qty <= 0) delete n[key];
+        else n[key] = Math.round(qty * 10) / 10;
         return n;
       }),
     clear: () => setItems({}),
     total: cartTotal(lines),
-    count: lines.reduce((s, l) => s + l.qty, 0),
+    count: lines.length,
   };
   return <CartCtx.Provider value={value}>{children}</CartCtx.Provider>;
 }
