@@ -76,7 +76,7 @@ function MenuPage() {
       <section className="mx-auto max-w-lg px-5 py-16 text-center">
         <CheckCircle2 className="mx-auto h-16 w-16 text-success" />
         <h1 className="mt-4 text-3xl">{t.pre.thanks} {done.name}!</h1>
-        <p className="mt-3 text-lg">{t.pre.ready} <span className="font-hand text-3xl text-primary">{done.time}</span> {t.pre.on} {dayLabel(done.date)}. {fmt(done.total)} · {t.pre.payAtPickup}</p>
+        <p className="mt-3 text-lg">{t.pre.ready} <span className="font-hand text-3xl text-primary">{done.time}</span> {t.pre.on} {dayLabel(done.date).toLowerCase()}. {fmt(done.total)} · {t.pre.payAtPickup}</p>
         <div className="paper mt-8 p-5 text-left">
           <h2 className="text-xl">{t.pre.stampTitle}</h2>
           <div className="mt-3 grid grid-cols-5 gap-2">
