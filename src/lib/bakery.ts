@@ -27,15 +27,17 @@ export type Product = {
   price: number; // EUR
   bgn: number; // BGN shown smaller
   image: string;
+  weight: { bg: string; en: string };
+  allergens: ("gluten" | "eggs" | "milk")[];
   isMekitsa?: boolean;
 };
 
 export const PRODUCTS: Product[] = [
-  { id: "mekitsa1", name: { bg: "Мекица 1 бр.", en: "Mekitsa ×1" }, desc: { bg: "Гореща, току-що изпържена", en: "Hot, freshly fried" }, price: 1.38, bgn: 2.7, image: mekitsa1, isMekitsa: true },
-  { id: "mekitsi3", name: { bg: "Мекици 3 бр.", en: "Mekitsi ×3" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 5.36, bgn: 10.48, image: mekitsi3 },
-  { id: "mekitsi20", name: { bg: "Мекици 20 бр.", en: "Mekitsi ×20" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 27.6, bgn: 53.98, image: mekitsi20 },
-  { id: "pirozhki3", name: { bg: "Пирожки 3 бр.", en: "Pirozhki ×3" }, desc: { bg: "Пържени, златисти", en: "Fried, golden" }, price: 5.87, bgn: 11.48, image: pirozhki },
-  { id: "buhti", name: { bg: "Солени бухти", en: "Savoury buhti" }, desc: { bg: "Пухкави, като от баба", en: "Fluffy, just like grandma's" }, price: 5.11, bgn: 9.99, image: buhti },
+  { id: "mekitsa1", name: { bg: "Мекица 1 бр.", en: "Mekitsa ×1" }, desc: { bg: "Гореща, току-що изпържена", en: "Hot, freshly fried" }, price: 1.38, bgn: 2.7, image: mekitsa1, weight: { bg: "100 г.", en: "100 g" }, allergens: ["gluten", "eggs", "milk"], isMekitsa: true },
+  { id: "mekitsi3", name: { bg: "Мекици 3 бр.", en: "Mekitsi ×3" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 5.36, bgn: 10.48, image: mekitsi3, weight: { bg: "500 г.", en: "500 g" }, allergens: ["gluten", "eggs", "milk"] },
+  { id: "mekitsi20", name: { bg: "Мекици 20 бр.", en: "Mekitsi ×20" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 27.6, bgn: 53.98, image: mekitsi20, weight: { bg: "2,5 кг.", en: "2.5 kg" }, allergens: ["gluten", "eggs", "milk"] },
+  { id: "pirozhki3", name: { bg: "Пирожки 3 бр.", en: "Pirozhki ×3" }, desc: { bg: "Със сирене. Съдържа: брашно, яйца, мляко, сирене", en: "With white cheese. Contains: flour, eggs, milk, cheese" }, price: 5.87, bgn: 11.48, image: pirozhki, weight: { bg: "450 г.", en: "450 g" }, allergens: ["gluten", "eggs", "milk"] },
+  { id: "buhti", name: { bg: "Солени бухти", en: "Savoury buhti" }, desc: { bg: "С извара, сирене и кашкавал", en: "With curd cheese, white cheese and kashkaval" }, price: 5.11, bgn: 9.99, image: buhti, weight: { bg: "150 г.", en: "150 g" }, allergens: ["gluten", "eggs", "milk"] },
 ];
 
 // PLACEHOLDER reviews — replace with real customer reviews.
