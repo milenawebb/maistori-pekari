@@ -16,13 +16,13 @@ const toMin = (s: string) => Number(s.slice(0, 2)) * 60 + Number(s.slice(3, 5));
 const toHHMM = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 
 export function sofiaParts(d: Date) {
-  const p = Object.fromEntries(
+  const p: Record<string, string> = Object.fromEntries(
     new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
       .formatToParts(d)
       .map((x) => [x.type, x.value]),
   );
-  const date = `${p.year}-${p.month}-${p.day}`;
-  return { date, minutes: Number(p.hour) * 60 + Number(p.minute), weekday: weekdayOf(date) };
+  const date = `${p['year']}-${p['month']}-${p['day']}`;
+  return { date, minutes: Number(p['hour']) * 60 + Number(p['minute']), weekday: weekdayOf(date) };
 }
 
 export const weekdayOf = (date: string) => new Date(`${date}T12:00:00Z`).getUTCDay();

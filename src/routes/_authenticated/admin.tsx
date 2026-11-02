@@ -55,7 +55,10 @@ function Admin() {
 
   async function saveFresh(value: string) {
     const { error } = await supabase.from("site_status").update({ fresh_at: value, updated_at: new Date().toISOString() }).eq("id", 1);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Записано");
     qc.invalidateQueries({ queryKey: ["site_status"] });
   }
