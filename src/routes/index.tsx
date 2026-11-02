@@ -30,6 +30,7 @@ function Home() {
         )}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,color-mix(in_oklab,var(--ink)_78%,transparent)_0%,color-mix(in_oklab,var(--ink)_35%,transparent)_45%,transparent_75%)]" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/60 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ink/55 to-transparent" />
         <div className="relative mx-auto flex h-full max-w-[1200px] flex-col justify-end px-5 pb-28 text-ink-foreground md:pb-24">
           <LiveStatus overlay className="self-start" />
           <h1 className="mt-6 max-w-2xl text-5xl leading-[1.05] md:text-7xl">{t.hero.title}</h1>

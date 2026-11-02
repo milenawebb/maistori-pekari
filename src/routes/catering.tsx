@@ -54,6 +54,7 @@ function Catering() {
       <section className="relative overflow-hidden bg-ink">
         <img src={catering} alt="" width={1920} height={1280} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-tr from-ink/80 via-ink/35 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ink/55 to-transparent" />
         <div className="relative mx-auto flex min-h-[78svh] max-w-[1200px] flex-col justify-end px-5 pb-16 pt-32 text-ink-foreground md:pb-24">
           <p className="inline-flex items-center gap-2 self-start rounded-full bg-card/15 px-3.5 py-1.5 text-sm font-medium ring-1 ring-card/30 backdrop-blur-md"><Building2 className="h-4 w-4" strokeWidth={1.6} />{t.office.kicker}</p>
           <h1 className="mt-6 max-w-2xl text-5xl leading-[1.05] md:text-7xl">{t.office.title}</h1>
