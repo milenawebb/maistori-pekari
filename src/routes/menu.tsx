@@ -128,7 +128,7 @@ function MenuPage() {
                       <button aria-label="-" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(key, qty - 1)}><Minus className="h-3.5 w-3.5" /></button>
                       <span className="w-6 text-center text-sm font-semibold">{qty}</span>
                       <button aria-label="+" className="grid h-8 w-8 place-items-center rounded-full border border-border" onClick={() => setQty(key, qty + 1)}><Plus className="h-3.5 w-3.5" /></button>
-                      <button aria-label="Remove" className="ml-1 p-1.5 text-muted-foreground" onClick={() => setQty(p.id, 0)}><Trash2 className="h-4 w-4" strokeWidth={1.6} /></button>
+                      <button aria-label="Remove" className="ml-1 p-1.5 text-muted-foreground" onClick={() => setQty(key, 0)}><Trash2 className="h-4 w-4" strokeWidth={1.6} /></button>
                     </div>
                   </li>
                 ))}
