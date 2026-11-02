@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Field } from "@/components/site";
+import { Field, HeaderSpacer } from "@/components/site";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -44,10 +44,10 @@ function AuthPage() {
   }
 
   return (
-    <section className="mx-auto max-w-sm px-5 py-16">
-      <h1 className="enamel px-4 py-2 text-2xl">{mode === "in" ? "Вход" : "Регистрация"}</h1>
+    <><HeaderSpacer /><section className="mx-auto max-w-sm px-5 py-16">
+      <h1 className="text-4xl">{mode === "in" ? "Вход" : "Регистрация"}</h1>
       <p className="mt-3 text-sm text-muted-foreground">Само за собственика. Първият регистриран акаунт получава достъп до поръчките.</p>
-      <form onSubmit={submit} className="paper mt-6 space-y-3 p-5">
+      <form onSubmit={submit} className="card mt-6 space-y-3 p-5">
         <Field label="Имейл" name="email" type="email" />
         <Field label="Парола" name="password" type="password" />
         {msg && <p className="text-sm font-bold">{msg}</p>}
@@ -56,6 +56,6 @@ function AuthPage() {
       <button className="mt-4 text-sm underline" onClick={() => setMode(mode === "in" ? "up" : "in")}>
         {mode === "in" ? "Нямате акаунт? Регистрация" : "Имате акаунт? Вход"}
       </button>
-    </section>
+    </section></>
   );
 }

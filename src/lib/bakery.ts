@@ -1,6 +1,8 @@
-import mekitsi from "@/assets/mekitsi.jpg";
-import pirozhki from "@/assets/pirozhki.jpg";
-import buhti from "@/assets/donuts.jpg";
+import mekitsa1 from "@/assets/mekitsa-single.jpg";
+import mekitsi3 from "@/assets/hero-mekitsi.jpg";
+import mekitsi20 from "@/assets/mekitsi-plate.jpg";
+import pirozhki from "@/assets/pirozhki-set.jpg";
+import buhti from "@/assets/buhti.jpg";
 
 // PLACEHOLDER contact details — replace with the real ones.
 export const BUSINESS = {
@@ -29,9 +31,9 @@ export type Product = {
 };
 
 export const PRODUCTS: Product[] = [
-  { id: "mekitsa1", name: { bg: "Мекица 1 бр.", en: "Mekitsa ×1" }, desc: { bg: "Гореща, току-що изпържена", en: "Hot, freshly fried" }, price: 1.38, bgn: 2.7, image: mekitsi, isMekitsa: true },
-  { id: "mekitsi3", name: { bg: "Мекици 3 бр.", en: "Mekitsi ×3" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 5.36, bgn: 10.48, image: mekitsi },
-  { id: "mekitsi20", name: { bg: "Мекици 20 бр.", en: "Mekitsi ×20" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 27.6, bgn: 53.98, image: mekitsi },
+  { id: "mekitsa1", name: { bg: "Мекица 1 бр.", en: "Mekitsa ×1" }, desc: { bg: "Гореща, току-що изпържена", en: "Hot, freshly fried" }, price: 1.38, bgn: 2.7, image: mekitsa1, isMekitsa: true },
+  { id: "mekitsi3", name: { bg: "Мекици 3 бр.", en: "Mekitsi ×3" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 5.36, bgn: 10.48, image: mekitsi3 },
+  { id: "mekitsi20", name: { bg: "Мекици 20 бр.", en: "Mekitsi ×20" }, desc: { bg: "Със сладко, сирене и пудра захар", en: "With jam, white cheese and powdered sugar" }, price: 27.6, bgn: 53.98, image: mekitsi20 },
   { id: "pirozhki3", name: { bg: "Пирожки 3 бр.", en: "Pirozhki ×3" }, desc: { bg: "Пържени, златисти", en: "Fried, golden" }, price: 5.87, bgn: 11.48, image: pirozhki },
   { id: "buhti", name: { bg: "Солени бухти", en: "Savoury buhti" }, desc: { bg: "Пухкави, като от баба", en: "Fluffy, just like grandma's" }, price: 5.11, bgn: 9.99, image: buhti },
 ];
